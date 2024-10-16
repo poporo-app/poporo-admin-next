@@ -1,14 +1,14 @@
 'use client'
-import { openModal } from '@/lib/store/modal/ModalSlice'
-import UserDetailModal from '../UserDetailModal/UserDetailModal'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { toJapanese } from '@/constants/appInfo'
+import { openModal } from '@/lib/store/modal/ModalSlice'
 import { setUser, setUserList } from '@/lib/store/user/UserSlice'
-import { useDispatch } from 'react-redux'
 import { SearchState } from '@/actions/searchAction'
-import { useSelector } from 'react-redux'
 import { RootState } from '@/lib/store/store'
-import { useEffect } from 'react'
+
+import UserDetailModal from '../UserDetailModal/UserDetailModal'
 
 interface UserListTableProps {
   // searchState: SearchState
