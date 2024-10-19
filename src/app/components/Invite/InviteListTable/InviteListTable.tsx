@@ -3,7 +3,7 @@ import { openModal } from '@/lib/store/modal/ModalSlice'
 
 import { useDispatch } from 'react-redux'
 import { InviteSearchState } from '@/actions/inviteAction'
-import formatDate from '@/utils/customFormatDate'
+import formatDate, { CustomTimestamp } from '@/utils/customFormatDate'
 import { setInvite } from '@/lib/store/invite/InviteSlice'
 import InviteDetailModal from '../InviteDetailModal/InviteDetailModal'
 
@@ -55,7 +55,7 @@ const InviteListTable = ({ state, formAction }: InviteListTableProps) => {
                 {inviteUser?.inviteUser?.name}
               </td>
               <td className="p-4 border-b border-blue-gray-50">
-                {formatDate(inviteUser?.createdAt)}
+                {formatDate(inviteUser.targetUser?.createdAt as CustomTimestamp)}
               </td>
             </tr>
           </tbody>
@@ -65,7 +65,6 @@ const InviteListTable = ({ state, formAction }: InviteListTableProps) => {
         {state.hasMore && (
           <form onSubmit={loadMore}>
             <input type="hidden" name="query" value={state.query || ''} />
-            <input type="hidden" name="isApply" value={state.isApply || ''} />
             <input type="hidden" name="sort" value={state.sort || ''} />
             <button
               type="submit"

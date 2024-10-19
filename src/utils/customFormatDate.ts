@@ -1,15 +1,13 @@
-import { Timestamp } from 'firebase/firestore'
+import { Timestamp as FirebaseTimestamp } from 'firebase/firestore'
 
-function formatDate(
-  timestamp: Timestamp | { _seconds: number; _nanoseconds: number } | null | undefined
-): string {
+export type CustomTimestamp = FirebaseTimestamp | { _seconds: number; _nanoseconds: number }
+
+function formatDate(timestamp: CustomTimestamp | null | undefined): string {
   if (!timestamp) {
     return 'N/A'
   }
-
   let date: Date
-
-  if (timestamp instanceof Timestamp) {
+  if (timestamp instanceof FirebaseTimestamp) {
     date = timestamp.toDate()
   } else if (
     typeof timestamp === 'object' &&
@@ -20,7 +18,6 @@ function formatDate(
   } else {
     return 'Invalid Date'
   }
-
   return date.toISOString().split('T')[0] // 'xxxx-xx-xx' 形式に変換
 }
 

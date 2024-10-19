@@ -8,7 +8,7 @@ import { toJapanese } from '@/constants/appInfo'
 import { pref } from '@/constants/pref'
 import { RootState } from '@/lib/store/store'
 import Link from 'next/link'
-import formatDate from '@/utils/customFormatDate'
+import formatDate, { CustomTimestamp } from '@/utils/customFormatDate'
 import { openPointModal } from '@/lib/store/modal/PointModalSlice'
 import UserPointModal from './UserPointModal'
 
@@ -122,7 +122,7 @@ const UserDetailModal = () => {
           </div>
           <div className="grid grid-cols-3 mt-3">
             <div className="font-bold">登録日時</div>
-            <div className="text-md">{formatDate(user?.createdAt)}</div>
+            <div className="text-md">{formatDate(user?.createdAt as CustomTimestamp)}</div>
           </div>
         </div>
       </div>
