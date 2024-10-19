@@ -57,8 +57,6 @@ jobs:
           NEXT_PUBLIC_FIREBASE_PRIVATE_KEY='$(echo "${{ secrets.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY }}" | sed 's/\\n/\\\\n/g')'
           NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL='${{ secrets.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL }}'
           NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}'
-          NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}'
-          API_URL='${{ secrets.API_URL }}'
           EOF
 
           # Debug: Display .env content (masked)
