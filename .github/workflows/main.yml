@@ -61,6 +61,18 @@ jobs:
             exit 1
           fi
 
+      - name: Check environment variables
+        run: |
+          echo "Checking environment variables..."
+          echo "NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY:0:5}..."
+          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN is set: $([[ -n $NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ]] && echo 'Yes' || echo 'No')"
+          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID is set: $([[ -n $NEXT_PUBLIC_FIREBASE_PROJECT_ID ]] && echo 'Yes' || echo 'No')"
+          # 他の環境変数も同様にチェック
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
