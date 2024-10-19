@@ -18,7 +18,10 @@ export interface InviteDoApprovedState {
   message?: string
 }
 
-export async function inviteAction(prevState: any, formData: FormData): Promise<InviteSearchState> {
+export async function inviteAction(
+  prevState: InviteSearchState,
+  formData: FormData
+): Promise<InviteSearchState> {
   const session = await getServerSession(authOptions)
   const searchParams = extractSearchParams(formData)
   const url = generateSearchUrl(searchParams)
@@ -44,7 +47,7 @@ export async function inviteAction(prevState: any, formData: FormData): Promise<
 }
 
 export async function doApproved(
-  prevState: any,
+  prevState: InviteDoApprovedState,
   formData: FormData
 ): Promise<InviteDoApprovedState> {
   const session = await getServerSession(authOptions)

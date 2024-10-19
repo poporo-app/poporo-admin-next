@@ -1,8 +1,6 @@
-import { getServerSession } from 'next-auth'
 import { getToken } from 'next-auth/jwt'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { authOptions } from './config/auth'
 
 // JWTシークレット（Firebase認証で使うNextAuthのシークレットと同じ）
 const secret = process.env.NEXTAUTH_SECRET

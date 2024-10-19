@@ -15,7 +15,10 @@ export interface SearchState {
   message?: string
 }
 
-export async function searchAction(prevState: any, formData: FormData): Promise<SearchState> {
+export async function searchAction(
+  prevState: SearchState,
+  formData: FormData
+): Promise<SearchState> {
   const searchParams = extractSearchParams(formData)
   const url = generateSearchUrl(searchParams)
   try {

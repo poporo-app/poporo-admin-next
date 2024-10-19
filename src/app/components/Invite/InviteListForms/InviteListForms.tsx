@@ -1,5 +1,4 @@
 'use client'
-import { CATEGORIES } from '@/constants/appInfo'
 import SubmitButton from '../../Button/SubmitButton'
 import { InviteSearchState } from '@/actions/inviteAction'
 

@@ -9,7 +9,7 @@ export interface PointState {
   message: string
 }
 
-export async function pointAction(prevState: any, formData: FormData): Promise<PointState> {
+export async function pointAction(prevState: PointState, formData: FormData): Promise<PointState> {
   const session = await getServerSession(authOptions)
   console.log(formData.get('type'))
   const res = await fetch(`${process.env.API_URL}/point`, {

@@ -1,12 +1,12 @@
 import admin from '@/lib/firebaseAdmin'
 import { withAuth } from '@/lib/withAuth'
 import { Query, CollectionReference, WhereFilterOp } from 'firebase-admin/firestore'
-import { NextRequest, NextResponse, userAgent } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 interface QueryCondition {
   field: string
   operator: WhereFilterOp
-  value: any
+  value: unknown
 }
 
 export const GET = withAuth(async (req: NextRequest) => {

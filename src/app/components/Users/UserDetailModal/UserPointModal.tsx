@@ -6,7 +6,7 @@ import { RootState } from '@/lib/store/store'
 import { closePointModal, setPointModalMessage } from '@/lib/store/modal/PointModalSlice'
 import SubmitButton from '../../Button/SubmitButton'
 import { useFormState } from 'react-dom'
-import { pointAction } from '@/actions/pointAction'
+import { pointAction, PointState } from '@/actions/pointAction'
 import { updateUserPoint } from '@/lib/store/user/UserSlice'
 
 type UserPointModalProps = {
@@ -47,7 +47,7 @@ const UserPointModal = ({ user }: UserPointModalProps) => {
     // The message will be cleared automatically by the closePointModal action
   }
 
-  const handleFormAction = async (prevState: any, formData: FormData) => {
+  const handleFormAction = async (prevState: PointState, formData: FormData) => {
     const result = await pointAction(prevState, formData)
     if (result.message) {
       dispatch(setPointModalMessage(result.message))
@@ -58,7 +58,7 @@ const UserPointModal = ({ user }: UserPointModalProps) => {
     return result
   }
 
-  const [state, formAction] = useFormState(handleFormAction, { point: 0, type: '', message: '' })
+  const [, formAction] = useFormState(handleFormAction, { point: 0, type: '', message: '' })
   const dispatch = useDispatch()
   return (
     <Modal isOpen={isOpen} style={modalStyle} onRequestClose={() => handleCloseModal()}>

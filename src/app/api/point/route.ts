@@ -1,4 +1,4 @@
-import { firestore, messaging } from 'firebase-admin'
+import { firestore } from 'firebase-admin'
 import admin from '@/lib/firebaseAdmin'
 import { withAuth } from '@/lib/withAuth'
 import { NextRequest, NextResponse } from 'next/server'
@@ -22,7 +22,7 @@ export const POST = withAuth(async (req: NextRequest) => {
 
       const userData = userDoc.data() as SalonUser
 
-      let currentPoints = userData.point || 0
+      const currentPoints = userData.point || 0
       let newPoint = 0
       let message = ''
       const persePoint = parseInt(point, 10)
@@ -50,8 +50,8 @@ export const POST = withAuth(async (req: NextRequest) => {
 
       transaction.update(userRef, { point: newPoint })
 
-      //   const pointHistoryRef = userRef.collection('point_history').doc(pointHistoryId)
-      //   transaction.set(pointHistoryRef, pointHistoryData)
+      const pointHistoryRef = userRef.collection('point_history').doc(pointHistoryId)
+      transaction.set(pointHistoryRef, pointHistoryData)
 
       return {
         newPoints: newPoint,

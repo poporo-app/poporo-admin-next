@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid'
 interface QueryCondition {
   field: string
   operator: WhereFilterOp
-  value: any
+  value: unknown
 }
 
 export const GET = withAuth(async (req: NextRequest) => {
@@ -162,12 +162,11 @@ async function getTotalCount(usersQuery: FirebaseFirestore.Query): Promise<numbe
 export const POST = withAuth(async (req: NextRequest) => {
   try {
     const body = await req.json()
-    const { targetUid, inviteUid, inviteDocId } = body
+    const { targetUid, inviteUid } = body
 
     const db = admin.firestore()
     const userRef = db.collection('user').doc(inviteUid)
     const targetUserRef = db.collection('user').doc(targetUid)
-    const inviteUserRef = db.collection('invite_users').doc(inviteDocId)
 
     // トランザクションを使用してポイントを更新
     const result = await db.runTransaction(async (transaction) => {

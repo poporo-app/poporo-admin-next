@@ -33,7 +33,7 @@ const InviteDetailModal = () => {
   const invite = useSelector((state: RootState) => state.invite.inviteUser)
   const isOpen = useSelector((state: RootState) => state.modal.isOpen)
   const dispatch = useDispatch()
-  const [state, formAction] = useFormState(doApproved, { results: false, message: '' })
+  const [, formAction] = useFormState(doApproved, { results: false, message: '' })
   return (
     <Modal isOpen={isOpen} style={modalStyle} onRequestClose={() => dispatch(closeModal())}>
       <div className="fixed w-100">
@@ -118,7 +118,7 @@ const InviteDetailModal = () => {
           </div>
           <div className="grid grid-cols-3 mt-3">
             <div className="font-bold">登録日時</div>
-            <div className="text-md">{formatDate(invite.targetUser?.createdAt as any)}</div>
+            <div className="text-md">{formatDate(invite.targetUser?.createdAt as undefined)}</div>
           </div>
         </div>
       </div>

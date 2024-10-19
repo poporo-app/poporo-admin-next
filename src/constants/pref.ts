@@ -6,7 +6,3 @@ export const pref: Record<string, string> = {
   '21': '岐阜県',
   '34': '広島県',
 }
-
-export function prefCodeToName(code: string) {
-  return pref.code
-}

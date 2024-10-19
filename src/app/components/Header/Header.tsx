@@ -17,7 +17,7 @@ const Header = () => {
     <header className="flex justify-between py-4 pr-4 bg-appBaseColor">
       <div className="ml-4">
         <Link href="/">
-          <img className="w-1/3" src="/img/logo.png" />
+          <img alt="logo" className="w-1/3" src="/img/logo.png" />
         </Link>
       </div>
       <button

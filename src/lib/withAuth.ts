@@ -1,8 +1,10 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+
+type RouteHandler = (req: NextRequest) => Promise<NextResponse> | NextResponse
 
 // 認証を行うラッパー関数
-export const withAuth = (handler: Function) => {
-  return async (req: Request) => {
+export const withAuth = (handler: RouteHandler): RouteHandler => {
+  return async (req: NextRequest) => {
     const authHeader = req.headers.get('Authorization')
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
@@ -10,8 +12,6 @@ export const withAuth = (handler: Function) => {
         { status: 401 }
       )
     }
-
-    const token = authHeader.split(' ')[1]
 
     try {
       return handler(req) // 認証が成功した場合にハンドラを呼び出す
