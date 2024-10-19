@@ -35,17 +35,19 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_PRIVATE_KEY=$(echo "${{ secrets.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY }}" | sed 's/\\n/\\\\n/g')" >> .env
-          echo "NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL=${{ secrets.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL }}" >> .env
-          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env
-          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
-          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          {
+            echo "NEXT_PUBLIC_FIREBASE_API_KEY='${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}'"
+            echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN='${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}'"
+            echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}'"
+            echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET='${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}'"
+            echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}'"
+            echo "NEXT_PUBLIC_FIREBASE_APP_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}'"
+            echo "NEXT_PUBLIC_FIREBASE_PRIVATE_KEY='$(echo "${{ secrets.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY }}" | sed 's/$/\\n/' | tr -d '\n')'"
+            echo "NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL='${{ secrets.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL }}'"
+            echo "NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}'"
+            echo "NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}'"
+            echo "API_URL='${{ secrets.API_URL }}'"
+          } > .env
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
