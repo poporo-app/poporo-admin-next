@@ -73,11 +73,11 @@ jobs:
             exit 1
           fi
 
-      - name: Build application
-        run: |
-          echo "Starting build process..."
-          npm run build
-          echo "Build completed. Checking for any warnings or errors in the build log..."
+      # - name: Build application
+      #   run: |
+      #     echo "Starting build process..."
+      #     npm run build
+      #     echo "Build completed. Checking for any warnings or errors in the build log..."
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
