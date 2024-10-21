@@ -1,0 +1,103 @@
+name: Deploy to Amazon ECS
+
+on:
+  push:
+    branches: ['main']
+
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: next-js-repo
+  ECS_SERVICE: next-js-service
+  ECS_CLUSTER: next-js-cluster
+  ECS_TASK_DEFINITION: task-definition.json
+  CONTAINER_NAME: next-js-container
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: product
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Check environment variables
+        run: |
+          echo "Checking environment variables..."
+          echo "NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY:0:5}..."
+          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN is set: $([[ -n $NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ]] && echo 'Yes' || echo 'No')"
+          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID is set: $([[ -n $NEXT_PUBLIC_FIREBASE_PROJECT_ID ]] && echo 'Yes' || echo 'No')"
+          # 他の環境変数も同様にチェック
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+
+      - name: Create .env file
+        run: |
+          cat << EOF > .env
+          NEXT_PUBLIC_FIREBASE_API_KEY='${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}'
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN='${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}'
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}'
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET='${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}'
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}'
+          NEXT_PUBLIC_FIREBASE_APP_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}'
+          NEXT_PUBLIC_FIREBASE_PRIVATE_KEY='$(echo "${{ secrets.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY }}" | sed 's/\\n/\\\\n/g')'
+          NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL='${{ secrets.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL }}'
+          NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}'
+          EOF
+
+          # Debug: Display .env content (masked)
+          echo "Content of .env file (values masked):"
+          sed 's/=.*$/=***/' .env
+
+          # Validate .env file
+          if [ -s .env ]; then
+            echo ".env file created successfully"
+          else
+            echo "Error: .env file is empty"
+            exit 1
+          fi
+
+      # - name: Build application
+      #   run: |
+      #     echo "Starting build process..."
+      #     npm run build
+      #     echo "Build completed. Checking for any warnings or errors in the build log..."
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
