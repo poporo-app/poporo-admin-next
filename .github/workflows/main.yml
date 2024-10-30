@@ -10,7 +10,7 @@ env:
   ECS_SERVICE: poporo-admin-next-service
   ECS_CLUSTER: poporo-admin-next-cluster
   ECS_TASK_DEFINITION: task-definition.json
-  CONTAINER_NAME: next-js-container
+  CONTAINER_NAME: next
 
 jobs:
   deploy:
