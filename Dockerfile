@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN yarn install
 
+RUN apk add --no-cache curl
+
 COPY . .
 
 # 環境変数を ARG で受け取る
@@ -31,7 +33,6 @@ ENV NEXTAUTH_SECRET=$NEXTAUTH_SECRET
 
 RUN yarn build
 
-ENV PORT 80
-EXPOSE 80
+EXPOSE 3000
 
 CMD ["yarn", "start"]
