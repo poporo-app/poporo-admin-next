@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: ap-northeast-1
   ECR_REPOSITORY: poporo-admin-next-repo
-  ECS_SERVICE: poporo-admin-next-service
+  ECS_SERVICE: poporo-admin-next-with-alb-service
   ECS_CLUSTER: poporo-admin-next-cluster
   ECS_TASK_DEFINITION: task-definition.json
   CONTAINER_NAME: next
