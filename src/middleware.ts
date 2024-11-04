@@ -6,6 +6,10 @@ import type { NextRequest } from 'next/server'
 const secret = process.env.NEXTAUTH_SECRET
 
 export async function middleware(req: NextRequest) {
+  // ヘルスチェックエンドポイントをスキップ
+  if (req.nextUrl.pathname.startsWith('/api/health')) {
+    return NextResponse.next()
+  }
   // 認証トークンを取得（JWT）
   const token = await getToken({ req, secret })
   if (token) {
