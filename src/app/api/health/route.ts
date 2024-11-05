@@ -1,6 +1,14 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+// src/app/api/health/route.ts
+import { NextResponse } from 'next/server'
 
-// 認証をバイパスするヘルスチェック用エンドポイント
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json({ status: 'ok' })
+export async function GET() {
+  return NextResponse.json(
+    {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+    },
+    {
+      status: 200,
+    }
+  )
 }
