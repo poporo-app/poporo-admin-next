@@ -35,6 +35,35 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Check environment variables
+        run: |
+          echo "Checking environment variables..."
+          echo "NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY:0:5}..."
+          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN is set: $([[ -n $NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ]] && echo 'Yes' || echo 'No')"
+          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID is set: $([[ -n $NEXT_PUBLIC_FIREBASE_PROJECT_ID ]] && echo 'Yes' || echo 'No')"
+          # 他の環境変数も同様にチェック
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: ${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+
+      - name: Create .env file
+        run: |
+          cat << EOF > .env
+          NEXT_PUBLIC_FIREBASE_API_KEY='${{ secrets.NEXT_PUBLIC_FIREBASE_API_KEY }}'
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN='${{ secrets.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN }}'
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}'
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET='${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}'
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}'
+          NEXT_PUBLIC_FIREBASE_APP_ID='${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}'
+          NEXT_PUBLIC_FIREBASE_PRIVATE_KEY='$(echo "${{ secrets.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY }}" | sed 's/\\n/\\\\n/g')'
+          NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL='${{ secrets.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL }}'
+          NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}'
+          NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}'
+          PUSH_SUBMIT_FROM_URL='${{ secrets.PUSH_SUBMIT_FROM_URL }}'
+          API_URL='${{ secrets.API_URL }}'
+          EOF
+
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
