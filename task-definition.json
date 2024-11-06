@@ -1,8 +1,12 @@
 {
+  "family": "poporo-admin-next-task",
+  "executionRoleArn": "arn:aws:iam::614863383927:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::614863383927:role/ecsTaskRole",
+  "networkMode": "awsvpc",
   "containerDefinitions": [
     {
       "name": "next",
-      "image": "<image uri>",
+      "image": "614863383927.dkr.ecr.ap-northeast-1.amazonaws.com/poporo-admin-next-repo:latest",
       "cpu": 0,
       "portMappings": [
         {
@@ -16,38 +20,27 @@
       "essential": true,
       "environment": [
         {
-          "name": "PORT",
-          "value": "3000"
-        },
-        {
           "name": "NODE_ENV",
           "value": "production"
         }
       ],
-      "environmentFiles": [],
-      "mountPoints": [],
-      "volumesFrom": [],
-      "ulimits": [],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      },
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
           "awslogs-group": "/ecs/poporo-admin-next-task",
-          "mode": "non-blocking",
-          "awslogs-create-group": "true",
-          "max-buffer-size": "25m",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
-        },
-        "secretOptions": []
-      },
-      "systemControls": []
+        }
+      }
     }
   ],
-  "family": "poporo-admin-next-task",
-  "executionRoleArn": "ecsTaskExecutionRole",
-  "networkMode": "awsvpc",
-  "volumes": [],
-  "placementConstraints": [],
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "1024",
   "memory": "3072",
