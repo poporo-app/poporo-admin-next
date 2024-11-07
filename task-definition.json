@@ -1,11 +1,11 @@
 {
-  "family": "poporo-admin-next-task",
+  "family": "poporo-admin-next-task2",
   "executionRoleArn": "arn:aws:iam::614863383927:role/ecsTaskExecutionRole",
   "taskRoleArn": "arn:aws:iam::614863383927:role/ecsTaskRole",
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
-      "name": "next",
+      "name": "next2",
       "image": "614863383927.dkr.ecr.ap-northeast-1.amazonaws.com/poporo-admin-next-repo:latest",
       "cpu": 0,
       "portMappings": [
@@ -34,7 +34,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/poporo-admin-next-task",
+          "awslogs-group": "/ecs/poporo-admin-next-task2",
           "awslogs-region": "ap-northeast-1",
           "awslogs-stream-prefix": "ecs"
         }
