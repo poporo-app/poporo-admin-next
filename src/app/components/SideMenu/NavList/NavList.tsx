@@ -1,6 +1,6 @@
 import { FaUsers } from 'react-icons/fa'
 import { RiMailSendFill } from 'react-icons/ri'
-
+import { MdOutlineHistory } from 'react-icons/md'
 import NavItem from './NavItem/NavItem'
 
 interface NavItemType {
@@ -14,6 +14,7 @@ const NavList = () => {
   const navItem: NavItemType[] = [
     { id: 1, label: 'サロン情報', link: '/users', icon: <FaUsers size={20} /> },
     { id: 2, label: '招待一覧', link: '/invite', icon: <RiMailSendFill size={20} /> },
+    { id: 3, label: '施術履歴', link: '/history', icon: <MdOutlineHistory size={20} /> },
   ]
   return (
     <div className="mt-24">

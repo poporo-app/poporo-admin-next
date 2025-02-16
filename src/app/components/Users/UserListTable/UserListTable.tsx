@@ -1,5 +1,5 @@
 'use client'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { toJapanese } from '@/constants/appInfo'
@@ -26,6 +26,11 @@ const UserListTable = ({ state, formAction }: UserListTableProps) => {
     dispatch(setUserList(state.results))
   }, [dispatch, state.results])
 
+  const handleRowClick = (user: SalonUser) => {
+    dispatch(setUser(user))
+    dispatch(openModal())
+  }
+
   const loadMore = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
@@ -50,10 +55,7 @@ const UserListTable = ({ state, formAction }: UserListTableProps) => {
           <tbody
             key={user.id}
             className="cursor-pointer hover:bg-gray-200"
-            onClick={() => {
-              dispatch(setUser(user))
-              return dispatch(openModal())
-            }}
+            onClick={() => handleRowClick(user)}
           >
             <tr>
               <td className="p-4 text-xs border-b border-blue-gray-50">{user.id}</td>

@@ -9,7 +9,7 @@ import { RootState } from '@/lib/store/store'
 import Link from 'next/link'
 import formatDate from '@/utils/customFormatDate'
 import SubmitButton from '../../Button/SubmitButton'
-import { doApproved } from '@/actions/inviteAction'
+import { doApproved, InviteDoApprovedState } from '@/actions/inviteAction'
 import { useFormState } from 'react-dom'
 
 const modalStyle = {
@@ -33,7 +33,10 @@ const InviteDetailModal = () => {
   const invite = useSelector((state: RootState) => state.invite.inviteUser)
   const isOpen = useSelector((state: RootState) => state.modal.isOpen)
   const dispatch = useDispatch()
-  const [, formAction] = useFormState(doApproved, { results: false, message: '' })
+  const handleSubmit = async (prevState: InviteDoApprovedState, formData: FormData) => {
+    return await doApproved(prevState, formData)
+  }
+  const [, formAction] = useFormState(handleSubmit, { results: false, message: '' })
   return (
     <Modal isOpen={isOpen} style={modalStyle} onRequestClose={() => dispatch(closeModal())}>
       <div className="fixed w-100">

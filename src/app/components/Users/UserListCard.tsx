@@ -17,6 +17,8 @@ const UserListCard = ({ initialState }: UserListCardProps) => {
     Modal.setAppElement('.App')
   }, [])
   const [state, formAction] = useFormState(searchAction, initialState)
+  // console.log('state:', state)
+  console.log('formAction:', formAction)
   return (
     <div className="w-[95%] bg-white h-screen overflow-auto mx-auto rounded-md drop-shadow-md pb-10">
       <UserListForms state={state} formAction={formAction} />

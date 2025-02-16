@@ -48,17 +48,34 @@ declare global {
     updatedAt?: Timestamp
   }
 
+  interface Menu {
+    costPoint: string
+    imageUrl: string
+    menuDiscription: string
+    menuTitle: string
+    termsOfUse: string
+  }
+
   interface PointHistory {
     id: string
     point: number
     type: string
     createdAt?: Timestamp
+    user?: SalonUser | null
+    menu?: Menu | null
   }
 
   interface UserSearchParams {
     query?: string
     category?: string
     isApply?: string
+    sort?: string
+    lastVisible?: string
+    limit?: number
+  }
+
+  interface PointHistoryParams {
+    uid?: string
     sort?: string
     lastVisible?: string
     limit?: number

@@ -54,6 +54,13 @@ const userSlice = createSlice({
       }
       state.userList = state.userList.map((user) => (user.id === id ? { ...user, point } : user))
     },
+    updateIsApproval: (state, action: PayloadAction<{ id: string; approval: boolean }>) => {
+      const { id, approval } = action.payload
+      if (state.user) {
+        state.user.isApproved = approval
+      }
+      state.userList = state.userList.map((user) => (user.id === id ? { ...user, approval } : user))
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -71,5 +78,6 @@ const userSlice = createSlice({
   },
 })
 
-export const { unsetUser, setUserList, setUser, updateUserPoint } = userSlice.actions
+export const { unsetUser, setUserList, setUser, updateUserPoint, updateIsApproval } =
+  userSlice.actions
 export default userSlice.reducer
