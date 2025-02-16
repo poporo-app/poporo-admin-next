@@ -17,7 +17,6 @@ import { useFormState } from 'react-dom'
 import { doApproved, InviteDoApprovedState } from '@/actions/inviteAction'
 import SubmitButton from '../../Button/SubmitButton'
 import { updateIsApproval } from '@/lib/store/user/UserSlice'
-import { useEffect } from 'react'
 import { useUserData } from '../_hooks/use-user-data'
 
 const modalStyle = {

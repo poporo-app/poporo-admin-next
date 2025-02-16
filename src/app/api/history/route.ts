@@ -1,6 +1,6 @@
 import admin from '@/lib/firebaseAdmin'
 import { withAuth } from '@/lib/withAuth'
-import { Query, CollectionReference, WhereFilterOp } from 'firebase-admin/firestore'
+import { Query, WhereFilterOp } from 'firebase-admin/firestore'
 import { NextRequest, NextResponse } from 'next/server'
 
 interface QueryCondition {
@@ -18,8 +18,6 @@ export const GET = withAuth(async (req: NextRequest) => {
     const db = admin.firestore()
 
     const pointHistoryRef = db.collection(`user/${params.uid}/point_history`)
-    // const usersCollection = db.collection('user') as CollectionReference
-    console.log(pointHistoryRef)
     let usersQuery: Query = pointHistoryRef
 
     // point交換タイプでフィルタリング

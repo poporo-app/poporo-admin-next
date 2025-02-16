@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { toJapanese } from '@/constants/appInfo'
@@ -11,7 +11,6 @@ import { RootState } from '@/lib/store/store'
 import UserDetailModal from '../UserDetailModal/UserDetailModal'
 
 interface UserListTableProps {
-  // searchState: SearchState
   state: SearchState
   formAction: (formData: FormData) => void
 }

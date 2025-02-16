@@ -33,7 +33,7 @@ interface HistoryModalProps {
 const HistoryModal = ({ user }: HistoryModalProps) => {
   const isOpen = useSelector((state: RootState) => state.historyModal.isOpen)
   const dispatch = useDispatch()
-  const { histories, totalCount, loading, error } = useHistory(user.id)
+  const { histories, totalCount, loading } = useHistory(user.id)
   return (
     <Modal isOpen={isOpen} style={modalStyle} onRequestClose={() => dispatch(closeHistoryModal())}>
       <div className="fixed w-100">
